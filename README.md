@@ -1,2 +1,2 @@
 # AP-Cyber-Preview
-Preview for CTF Challenges in AP Cybersecurity 
+This is a simple preview for the CTF challenges (labs) in AP Cybersecurity. Some WILL be located on my GitHub Repositories as needed...

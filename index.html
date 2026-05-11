@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CyberAcademy — AP Cybersecurity Preview</title>
+  <!-- BEGIN HINT: Nice try looking at the source. Or... is it? Try the console. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #050a0e;
+      --surface: #0a1520;
+      --card: #0d1e2e;
+      --border: #1a3a5c;
+      --accent: #00f0ff;
+      --accent2: #ff006e;
+      --accent3: #39ff14;
+      --text: #c8e0f0;
+      --muted: #4a7090;
+      --glow: 0 0 20px rgba(0,240,255,0.4);
+      --glow2: 0 0 20px rgba(57,255,20,0.4);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 17px;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Scanline overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.08) 2px,
+        rgba(0,0,0,0.08) 4px
+      );
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* Grid background */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,240,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,240,255,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ─── NAVBAR ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 40px;
+      background: rgba(5,10,14,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'Orbitron', monospace;
+      font-weight: 900;
+      font-size: 1.3rem;
+      color: var(--accent);
+      letter-spacing: 3px;
+      text-shadow: var(--glow);
+    }
+    .nav-logo span { color: var(--accent2); }
+    .nav-links { display: flex; gap: 28px; list-style: none; }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* ─── HERO ─── */
+    .hero {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 24px 60px;
+    }
+    .hero-badge {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 4px;
+      color: var(--accent3);
+      border: 1px solid var(--accent3);
+      padding: 6px 18px;
+      margin-bottom: 28px;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+    .hero h1 {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(2.5rem, 7vw, 5.5rem);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -1px;
+      margin-bottom: 24px;
+    }
+    .hero h1 .line1 { color: #fff; display: block; }
+    .hero h1 .line2 {
+      color: transparent;
+      -webkit-text-stroke: 1.5px var(--accent);
+      display: block;
+      text-shadow: none;
+      filter: drop-shadow(0 0 12px var(--accent));
+    }
+    .hero-sub {
+      max-width: 580px;
+      color: var(--muted);
+      font-size: 1.1rem;
+      line-height: 1.7;
+      margin-bottom: 40px;
+    }
+    .hero-sub strong { color: var(--accent); }
+    .cta-group { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+    .btn-primary {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.8rem;
+      letter-spacing: 3px;
+      padding: 14px 36px;
+      background: var(--accent);
+      color: #000;
+      border: none;
+      cursor: pointer;
+      font-weight: 700;
+      transition: all 0.2s;
+      clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    }
+    .btn-primary:hover { background: #fff; box-shadow: var(--glow); transform: translateY(-2px); }
+    .btn-ghost {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+      padding: 14px 36px;
+      background: transparent;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-ghost:hover { background: rgba(0,240,255,0.08); }
+
+    /* Floating terminal lines */
+    .terminal-float {
+      position: absolute;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      color: rgba(0,240,255,0.18);
+      white-space: nowrap;
+      pointer-events: none;
+      animation: drift 20s linear infinite;
+    }
+    @keyframes drift {
+      0% { transform: translateY(0); opacity: 0; }
+      5% { opacity: 1; }
+      95% { opacity: 1; }
+      100% { transform: translateY(-80px); opacity: 0; }
+    }
+
+    /* ─── SECTION WRAPPER ─── */
+    section { position: relative; z-index: 1; }
+    .section-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 80px 24px;
+    }
+    .section-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 5px;
+      color: var(--accent2);
+      margin-bottom: 10px;
+    }
+    .section-title {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(1.6rem, 4vw, 2.6rem);
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 16px;
+    }
+    .section-sub {
+      color: var(--muted);
+      max-width: 520px;
+      line-height: 1.7;
+      margin-bottom: 48px;
+    }
+
+    /* ─── CHALLENGES ─── */
+    .challenges-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .challenge-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 28px;
+      cursor: pointer;
+      transition: all 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+    .challenge-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s;
+    }
+    .challenge-card:hover::before { transform: scaleX(1); }
+    .challenge-card:hover {
+      border-color: var(--accent);
+      box-shadow: var(--glow);
+      transform: translateY(-4px);
+    }
+    .challenge-card.solved {
+      border-color: var(--accent3);
+      box-shadow: var(--glow2);
+    }
+    .challenge-card.solved::before {
+      background: var(--accent3);
+      transform: scaleX(1);
+    }
+    .card-num {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 4px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+    .card-title {
+      font-family: 'Orbitron', monospace;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .card-desc {
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+    .card-tag {
+      display: inline-block;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 2px;
+      padding: 3px 10px;
+      border: 1px solid;
+      margin-right: 6px;
+    }
+    .tag-easy { color: var(--accent3); border-color: var(--accent3); }
+    .tag-medium { color: #ffb800; border-color: #ffb800; }
+    .tag-hard { color: var(--accent2); border-color: var(--accent2); }
+    .solved-badge {
+      position: absolute;
+      top: 14px; right: 14px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--accent3);
+      letter-spacing: 2px;
+      display: none;
+    }
+    .challenge-card.solved .solved-badge { display: block; }
+    .card-btn {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      padding: 9px 20px;
+      background: transparent;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 8px;
+    }
+    .card-btn:hover { background: rgba(0,240,255,0.1); }
+
+    /* ─── MODAL ─── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(6px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--card);
+      border: 1px solid var(--accent);
+      box-shadow: var(--glow);
+      max-width: 640px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 36px;
+      position: relative;
+      animation: modalIn 0.3s ease;
+    }
+    @keyframes modalIn {
+      from { opacity:0; transform: scale(0.95) translateY(20px); }
+      to { opacity:1; transform: scale(1) translateY(0); }
+    }
+    .modal-close {
+      position: absolute;
+      top: 16px; right: 20px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 1.2rem;
+      color: var(--muted);
+      cursor: pointer;
+      background: none; border: none;
+    }
+    .modal-close:hover { color: var(--accent2); }
+    .modal-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 4px;
+      color: var(--accent2);
+      margin-bottom: 8px;
+    }
+    .modal-title {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.4rem;
+      color: #fff;
+      margin-bottom: 16px;
+    }
+    .modal-body { color: var(--text); line-height: 1.75; margin-bottom: 24px; }
+    .modal-body p { margin-bottom: 12px; }
+    .modal-body ul { margin-left: 20px; margin-bottom: 12px; }
+    .modal-body li { margin-bottom: 6px; }
+    .modal-body code {
+      font-family: 'Share Tech Mono', monospace;
+      background: #0a1520;
+      border: 1px solid var(--border);
+      padding: 2px 8px;
+      font-size: 0.85rem;
+      color: var(--accent);
+    }
+    .modal-body pre {
+      font-family: 'Share Tech Mono', monospace;
+      background: #04090d;
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      padding: 16px;
+      font-size: 0.82rem;
+      color: var(--accent);
+      overflow-x: auto;
+      margin: 16px 0;
+      line-height: 1.6;
+    }
+    .hint-box {
+      background: rgba(0,240,255,0.04);
+      border: 1px solid rgba(0,240,255,0.15);
+      padding: 16px 20px;
+      margin: 16px 0;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .hint-box strong { color: var(--accent); }
+    .flag-input-wrap {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .flag-input {
+      flex: 1;
+      background: #04090d;
+      border: 1px solid var(--border);
+      color: var(--accent);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.9rem;
+      padding: 10px 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .flag-input:focus { border-color: var(--accent); }
+    .flag-input.wrong { border-color: var(--accent2); animation: shake 0.3s; }
+    .flag-input.correct { border-color: var(--accent3); }
+    @keyframes shake {
+      0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)}
+    }
+    .flag-submit {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 2px;
+      padding: 10px 22px;
+      background: var(--accent);
+      color: #000;
+      border: none;
+      cursor: pointer;
+      font-weight: 700;
+      transition: all 0.2s;
+    }
+    .flag-submit:hover { background: #fff; }
+    .flag-msg {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.8rem;
+      margin-top: 10px;
+      min-height: 20px;
+    }
+    .flag-msg.success { color: var(--accent3); }
+    .flag-msg.error { color: var(--accent2); }
+
+    /* ─── PROGRESS BAR ─── */
+    .progress-section {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .progress-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 28px 24px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .progress-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 3px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .progress-bar-wrap {
+      flex: 1;
+      min-width: 200px;
+      height: 6px;
+      background: var(--border);
+      position: relative;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent3));
+      transition: width 0.6s ease;
+      box-shadow: 0 0 10px var(--accent);
+    }
+    .progress-count {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.85rem;
+      color: var(--accent);
+      white-space: nowrap;
+    }
+
+    /* ─── CONCEPTS SECTION ─── */
+    .concepts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+    }
+    .concept-item {
+      border: 1px solid var(--border);
+      padding: 20px;
+      background: var(--card);
+    }
+    .concept-icon { font-size: 1.6rem; margin-bottom: 10px; }
+    .concept-name {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+    }
+    .concept-desc { color: var(--muted); font-size: 0.88rem; line-height: 1.5; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid var(--border);
+      padding: 32px 24px;
+      text-align: center;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 2px;
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+
+    /* ─── SCROLLBAR ─── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+    /* ─── VICTORY BANNER ─── */
+    .victory-banner {
+      display: none;
+      background: linear-gradient(90deg, #0a1520, #0d2e1a, #0a1520);
+      border: 1px solid var(--accent3);
+      box-shadow: var(--glow2);
+      padding: 32px;
+      text-align: center;
+      margin: 0 0 40px;
+    }
+    .victory-banner.show { display: block; animation: modalIn 0.5s ease; }
+    .victory-banner h2 {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.6rem;
+      color: var(--accent3);
+      margin-bottom: 10px;
+    }
+    .victory-banner p { color: var(--text); }
+  </style>
+</head>
+<body>
+
+<!-- SECRET HINT in HTML comment:
+     CHALLENGE 1 HINT: The flag is hidden nearby. Check your browser's Developer Tools.
+     Try: right-click → Inspect, then look at the Elements tab for a hidden element!
+-->
+
+<!-- HIDDEN ELEMENT for Challenge 1 -->
+<div id="secret-element" style="display:none;" data-secret="FLAG{h1dd3n_1n_pl41n_s1ght}">You found the hidden element! Grab the data-secret attribute value.</div>
+
+<nav>
+  <div class="nav-logo">CYBER<span>ACADEMY</span></div>
+  <ul class="nav-links">
+    <li><a href="#challenges">CHALLENGES</a></li>
+    <li><a href="#concepts">CONCEPTS</a></li>
+    <li><a href="#about">ABOUT</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <!-- Floating terminal lines -->
+  <div class="terminal-float" style="top:20%;left:5%;animation-delay:0s;">$ nmap -sV 192.168.1.1</div>
+  <div class="terminal-float" style="top:60%;left:8%;animation-delay:5s;">$ sqlmap -u "target.com?id=1"</div>
+  <div class="terminal-float" style="top:40%;right:6%;animation-delay:3s;">$ john --wordlist=rockyou.txt hash.txt</div>
+  <div class="terminal-float" style="top:75%;right:10%;animation-delay:8s;">$ wireshark -i eth0</div>
+
+  <div class="hero-badge">▶ AP CYBERSECURITY PREVIEW</div>
+  <h1>
+    <span class="line1">LEARN TO</span>
+    <span class="line2">HACK ETHICALLY</span>
+  </h1>
+  <p class="hero-sub">
+    Welcome to CyberAcademy — a hands-on preview of AP Cybersecurity.
+    Don't just read about hacking. <strong>Do it.</strong> Solve real challenges,
+    find hidden flags, and discover if cybersecurity is your calling.
+  </p>
+  <div class="cta-group">
+    <button class="btn-primary" onclick="document.getElementById('challenges').scrollIntoView({behavior:'smooth'})">START HACKING</button>
+    <button class="btn-ghost" onclick="document.getElementById('concepts').scrollIntoView({behavior:'smooth'})">WHAT YOU'LL LEARN</button>
+  </div>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-section">
+  <div class="progress-inner">
+    <span class="progress-label">MISSION PROGRESS</span>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+    </div>
+    <span class="progress-count" id="progressCount">0 / 5 FLAGS</span>
+  </div>
+</div>
+
+<!-- CHALLENGES -->
+<section id="challenges">
+  <div class="section-inner">
+    <div class="section-label">// ACTIVE MISSIONS</div>
+    <h2 class="section-title">Capture The Flag</h2>
+    <p class="section-sub">Each challenge teaches a real cybersecurity skill. Find the hidden flag and submit it below. No prior experience needed — just curiosity.</p>
+
+    <div id="victoryBanner" class="victory-banner">
+      <h2>🏆 ALL FLAGS CAPTURED</h2>
+      <p>You've completed every challenge. You think like a hacker. Welcome to AP Cybersecurity.</p>
+    </div>
+
+    <div class="challenges-grid">
+
+      <!-- CHALLENGE 1: Hidden Elements -->
+      <div class="challenge-card" id="card-1">
+        <div class="card-num">CHALLENGE // 01</div>
+        <div class="solved-badge">✓ SOLVED</div>
+        <div class="card-title">Hidden in Plain Sight</div>
+        <p class="card-desc">Developers sometimes hide things in HTML they think users can't see. Can you find what's lurking in this page's source?</p>
+        <span class="card-tag tag-easy">EASY</span>
+        <span class="card-tag">HTML INSPECTION</span>
+        <br><br>
+        <button class="card-btn" onclick="openModal(1)">[ LAUNCH CHALLENGE ]</button>
+      </div>
+
+      <!-- CHALLENGE 2: JS Console Secret -->
+      <div class="challenge-card" id="card-2">
+        <div class="card-num">CHALLENGE // 02</div>
+        <div class="solved-badge">✓ SOLVED</div>
+        <div class="card-title">Console Cowboy</div>
+        <p class="card-desc">Every browser has a secret developer console. Hackers use it to probe web apps. Yours has a message waiting for you.</p>
+        <span class="card-tag tag-easy">EASY</span>
+        <span class="card-tag">JAVASCRIPT</span>
+        <br><br>
+        <button class="card-btn" onclick="openModal(2)">[ LAUNCH CHALLENGE ]</button>
+      </div>
+
+      <!-- CHALLENGE 3: Base64 Encoding -->
+      <div class="challenge-card" id="card-3">
+        <div class="card-num">CHALLENGE // 03</div>
+        <div class="solved-badge">✓ SOLVED</div>
+        <div class="card-title">Encoded Secrets</div>
+        <p class="card-desc">Not all secrets are encrypted — some are just encoded. Decode this to reveal the flag: <code style="font-size:0.75rem;word-break:break-all;">RkxBR3tiNHMzNF9pc19ub3RfM25jcnlwdDEwbn0=</code></p>
+        <span class="card-tag tag-easy">EASY</span>
+        <span class="card-tag">ENCODING</span>
+        <br><br>
+        <button class="card-btn" onclick="openModal(3)">[ LAUNCH CHALLENGE ]</button>
+      </div>
+
+      <!-- CHALLENGE 4: Weak Login Bypass -->
+      <div class="challenge-card" id="card-4">
+        <div class="card-num">CHALLENGE // 04</div>
+        <div class="solved-badge">✓ SOLVED</div>
+        <div class="card-title">Broken Authentication</div>
+        <p class="card-desc">This login form has a serious vulnerability. The password check happens in the browser. Can you bypass it without knowing the password?</p>
+        <span class="card-tag tag-medium">MEDIUM</span>
+        <span class="card-tag">AUTH BYPASS</span>
+        <br><br>
+        <button class="card-btn" onclick="openModal(4)">[ LAUNCH CHALLENGE ]</button>
+      </div>
+
+      <!-- CHALLENGE 5: Cookie Manipulation -->
+      <div class="challenge-card" id="card-5">
+        <div class="card-num">CHALLENGE // 05</div>
+        <div class="solved-badge">✓ SOLVED</div>
+        <div class="card-title">Cookie Monster</div>
+        <p class="card-desc">Websites store cookies in your browser. What happens when you change one? Set a cookie named <code>admin</code> to the value <code>true</code> and reload.</p>
+        <span class="card-tag tag-medium">MEDIUM</span>
+        <span class="card-tag">COOKIES</span>
+        <br><br>
+        <button class="card-btn" onclick="openModal(5)">[ LAUNCH CHALLENGE ]</button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CONCEPTS -->
+<section id="concepts" style="background: var(--surface); border-top:1px solid var(--border);">
+  <div class="section-inner">
+    <div class="section-label">// COURSE CURRICULUM</div>
+    <h2 class="section-title">What You'll Master</h2>
+    <p class="section-sub">AP Cybersecurity covers the full spectrum of digital defense and ethical hacking, from code to networks to human psychology.</p>
+
+    <div class="concepts-grid">
+      <div class="concept-item">
+        <div class="concept-icon">🔐</div>
+        <div class="concept-name">Cryptography</div>
+        <div class="concept-desc">Encryption, hashing, certificates, and how secrets stay secret online.</div>
+      </div>
+      <div class="concept-item">
+        <div class="concept-icon">🌐</div>
+        <div class="concept-name">Network Security</div>
+        <div class="concept-desc">Firewalls, VPNs, packet sniffing, and how data travels safely.</div>
+      </div>
+      <div class="concept-item">
+        <div class="concept-icon">🕵️</div>
+        <div class="concept-name">Ethical Hacking</div>
+        <div class="concept-desc">Penetration testing, vulnerability scanning, and responsible disclosure.</div>
+      </div>
+      <div class="concept-item">
+        <div class="concept-icon">🛡️</div>
+        <div class="concept-name">Defensive Security</div>
+        <div class="concept-desc">Incident response, SIEM tools, and hardening systems against attack.</div>
+      </div>
+      <div class="concept-item">
+        <div class="concept-icon">🧠</div>
+        <div class="concept-name">Social Engineering</div>
+        <div class="concept-desc">Phishing, pretexting, and why humans are the biggest vulnerability.</div>
+      </div>
+      <div class="concept-item">
+        <div class="concept-icon">⚖️</div>
+        <div class="concept-name">Laws & Ethics</div>
+        <div class="concept-desc">CFAA, GDPR, CVE disclosure, and the ethics of hacking.</div>
+      </div>
+      <div class="concept-item">
+        <div class="concept-icon">💻</div>
+        <div class="concept-name">Web Security</div>
+        <div class="concept-desc">OWASP Top 10, SQL injection, XSS, CSRF, and secure coding.</div>
+      </div>
+      <div class="concept-item">
+        <div class="concept-icon">🏗️</div>
+        <div class="concept-name">Security Architecture</div>
+        <div class="concept-desc">Zero trust, defense in depth, and designing secure systems.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-inner" style="max-width:700px;">
+    <div class="section-label">// ABOUT THIS COURSE</div>
+    <h2 class="section-title">Why Cybersecurity?</h2>
+    <p style="color:var(--text);line-height:1.8;margin-bottom:16px;">
+      Cybersecurity is one of the fastest-growing fields on the planet, with over <strong style="color:var(--accent)">3.5 million unfilled jobs</strong> worldwide. Whether you want to protect hospitals from ransomware, hunt nation-state hackers, or build the next generation of secure software — it starts here.
+    </p>
+    <p style="color:var(--muted);line-height:1.8;margin-bottom:16px;">
+      AP Cybersecurity is a college-level course that earns you real academic credit while building skills the industry desperately needs. No experience required — just the willingness to think like an attacker to build like a defender.
+    </p>
+    <p style="color:var(--muted);line-height:1.8;">
+      The challenges above are a preview of how we learn: by doing. Every concept is paired with a hands-on activity. Welcome to the class where homework is hacking.
+    </p>
+  </div>
+</section>
+
+<footer>
+  <p>CYBERACADEMY &nbsp;|&nbsp; AP CYBERSECURITY PREVIEW &nbsp;|&nbsp; ALL CHALLENGES ARE EDUCATIONAL &nbsp;|&nbsp; <a href="#">ETHICAL HACKING ONLY</a></p>
+</footer>
+
+<!-- ─── MODALS ─── -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeOnOverlay(event)">
+  <div class="modal" id="modalBox">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<script>
+// ─── CHALLENGE DATA ───────────────────────────────────────────
+const challenges = {
+  1: {
+    title: "Hidden in Plain Sight",
+    label: "HTML INSPECTION",
+    flag: "FLAG{h1dd3n_1n_pl41n_s1ght}",
+    content: `
+      <p>Developers sometimes add hidden elements, comments, or metadata to web pages — thinking users will never see them. But <strong>anyone can inspect the HTML</strong> of any webpage.</p>
+      <p>This is how security researchers find hardcoded API keys, internal notes, and accidental data leaks every single day.</p>
+      <div class="hint-box"><strong>🎯 YOUR MISSION:</strong><br>
+      There is a hidden element on this page with a <code>data-secret</code> attribute containing the flag.<br><br>
+      <strong>HOW TO FIND IT:</strong><br>
+      1. Right-click anywhere on this page<br>
+      2. Click <strong>"Inspect"</strong> or <strong>"Inspect Element"</strong><br>
+      3. In the Elements tab, press <strong>Ctrl+F</strong> (Cmd+F on Mac)<br>
+      4. Search for: <code>data-secret</code><br>
+      5. The flag is the value of that attribute.</div>
+      <p><strong>What you're learning:</strong> Never trust that "hidden" means "secret." Always use server-side protection.</p>
+    `
+  },
+  2: {
+    title: "Console Cowboy",
+    label: "JAVASCRIPT",
+    flag: "FLAG{c0ns0l3_c0wb0y_r1d3s_4g41n}",
+    content: `
+      <p>Every browser has a <strong>JavaScript console</strong> — a command line for the web. Developers use it to debug apps. Hackers use it to probe for secrets, manipulate variables, and run code directly on a page.</p>
+      <p>We've hidden the flag inside a JavaScript variable on this page. Your job is to find it using the console.</p>
+      <div class="hint-box"><strong>🎯 YOUR MISSION:</strong><br>
+      Open your browser's <strong>Developer Tools</strong> (press <code>F12</code> or <code>Ctrl+Shift+I</code>), then click the <strong>"Console"</strong> tab.<br><br>
+      Type this command and press Enter:<br>
+      <pre>secretFlag</pre>
+      The flag will be printed to the console.</div>
+      <p><strong>What you're learning:</strong> JavaScript variables are visible to anyone in the browser. Never store sensitive data in client-side code.</p>
+    `
+  },
+  3: {
+    title: "Encoded Secrets",
+    label: "ENCODING",
+    flag: "FLAG{b4s34_is_not_3ncrypt10n}",
+    content: `
+      <p><strong>Base64</strong> is an encoding scheme, not encryption. It converts binary data into text — it's used for email attachments, JWTs, and image embedding. But it provides <em>zero security</em>. Anyone can decode it instantly.</p>
+      <p>Beginners often confuse "encoded" with "encrypted." A huge mistake — encoded data is trivially reversible.</p>
+      <div class="hint-box"><strong>🎯 YOUR MISSION:</strong><br>
+      Decode this Base64 string:<br>
+      <pre>RkxBR3tiNHMzNF9pc19ub3RfM25jcnlwdDEwbn0=</pre>
+      <strong>HOW TO DECODE:</strong><br>
+      Option 1 — Browser Console: Open DevTools → Console, type:<br>
+      <pre>atob("RkxBR3tiNHMzNF9pc19ub3RfM25jcnlwdDEwbn0=")</pre>
+      Option 2 — Google "base64 decode" and paste it in.<br>
+      Option 3 — Terminal: <code>echo "RkxBR3t..." | base64 --decode</code></div>
+      <p><strong>What you're learning:</strong> Encoding ≠ Encryption. Always use proper encryption (AES-256, RSA) for sensitive data.</p>
+    `
+  },
+  4: {
+    title: "Broken Authentication",
+    label: "AUTH BYPASS",
+    flag: "FLAG{cl13nt_s1d3_ch3cks_4r3_us3l3ss}",
+    content: `
+      <p>One of the most common web vulnerabilities is <strong>client-side authentication</strong> — where the password check happens in JavaScript instead of on the server. An attacker can bypass this entirely using the browser console.</p>
+      <div class="hint-box"><strong>🎯 YOUR MISSION:</strong><br>
+      Below is a "protected" login form. The password check runs in JavaScript.<br>
+      Your goal: bypass it WITHOUT knowing the password.<br><br>
+      <strong>METHOD 1 — Override the function:</strong><br>
+      Open DevTools → Console, then type:<br>
+      <pre>checkPassword = function() { grantAccess(); }</pre>
+      Then click Login.<br><br>
+      <strong>METHOD 2 — Call the success function directly:</strong><br>
+      <pre>grantAccess()</pre></div>
+      <div id="fakeLoginForm" style="margin-top:16px;padding:20px;border:1px solid var(--border);background:#04090d;">
+        <p style="font-family:'Share Tech Mono',monospace;font-size:0.8rem;color:var(--muted);margin-bottom:12px;">[ CLASSIFIED PORTAL — AUTHORIZED USERS ONLY ]</p>
+        <input type="text" placeholder="Username" value="student" style="width:100%;padding:8px;background:#0a1520;border:1px solid var(--border);color:var(--text);font-family:'Share Tech Mono',monospace;margin-bottom:8px;" readonly>
+        <input type="password" id="fakePassword" placeholder="Password" style="width:100%;padding:8px;background:#0a1520;border:1px solid var(--border);color:var(--text);font-family:'Share Tech Mono',monospace;margin-bottom:12px;">
+        <button onclick="checkPassword()" style="width:100%;padding:10px;background:var(--accent2);color:#fff;border:none;font-family:'Orbitron',monospace;font-size:0.8rem;letter-spacing:2px;cursor:pointer;">LOGIN</button>
+        <div id="loginMsg" style="margin-top:10px;font-family:'Share Tech Mono',monospace;font-size:0.8rem;color:var(--muted);"></div>
+      </div>
+      <p style="margin-top:16px;"><strong>What you're learning:</strong> Never trust client-side validation. All security checks must happen on the server.</p>
+    `
+  },
+  5: {
+    title: "Cookie Monster",
+    label: "COOKIES",
+    flag: "FLAG{c00k13s_4r3_d3l1c10us_4nd_d4ng3r0us}",
+    content: `
+      <p><strong>Cookies</strong> are small pieces of data your browser stores for websites. Sites often use cookies to track whether you're logged in, your role, or your preferences. But if they trust cookies without verification — anyone can fake them.</p>
+      <div class="hint-box"><strong>🎯 YOUR MISSION:</strong><br>
+      Set a browser cookie named <code>admin</code> with the value <code>true</code>, then click the button below to claim your flag.<br><br>
+      <strong>HOW TO SET THE COOKIE:</strong><br>
+      Open DevTools → Console, then type:<br>
+      <pre>document.cookie = "admin=true"</pre>
+      Press Enter, then click the button below to check your access.</div>
+      <div style="margin-top:16px;text-align:center;">
+        <button onclick="checkAdminCookie()" style="padding:12px 32px;background:transparent;color:var(--accent3);border:1px solid var(--accent3);font-family:'Orbitron',monospace;font-size:0.8rem;letter-spacing:2px;cursor:pointer;">CHECK ADMIN ACCESS</button>
+        <div id="cookieResult" style="margin-top:12px;font-family:'Share Tech Mono',monospace;font-size:0.85rem;color:var(--muted);"></div>
+      </div>
+      <p style="margin-top:16px;"><strong>What you're learning:</strong> Never store authorization data in unprotected cookies. Use signed/encrypted tokens (like JWTs with HMAC) and validate server-side.</p>
+    `
+  }
+};
+
+// ─── HIDDEN CONSOLE SECRET (Challenge 2) ─────────────────────
+// Attach to window so it's accessible from the browser console
+window.secretFlag = "FLAG{c0ns0l3_c0wb0y_r1d3s_4g41n}";
+console.log("%c🔓 CyberAcademy Secret Terminal", "color:#00f0ff;font-family:monospace;font-size:1.2rem;font-weight:bold;");
+console.log("%cYou opened the console. Good instinct, hacker.", "color:#39ff14;font-family:monospace;");
+console.log("%cType 'secretFlag' and press Enter to get the flag for Challenge 2.", "color:#4a7090;font-family:monospace;");
+
+// ─── AUTH BYPASS FUNCTIONS (Challenge 4) ─────────────────────
+// Attached to window so students can call grantAccess() from the console
+window.checkPassword = function() {
+  const pw = document.getElementById('fakePassword');
+  const msg = document.getElementById('loginMsg');
+  if(pw && pw.value === "IMPOSSIBLE_PASSWORD_NOBODY_KNOWS_XQ92") {
+    window.grantAccess();
+  } else {
+    if(msg) { msg.style.color='var(--accent2)'; msg.textContent = "❌ Wrong password. (Hint: you don't need it)"; }
+  }
+};
+window.grantAccess = function() {
+  const msg = document.getElementById('loginMsg');
+  if(msg) {
+    msg.style.color='var(--accent3)';
+    msg.innerHTML = "✅ ACCESS GRANTED — Your flag: <strong>FLAG{cl13nt_s1d3_ch3cks_4r3_us3l3ss}</strong>";
+  }
+};
+
+// ─── COOKIE CHECK (Challenge 5) ──────────────────────────────
+window.checkAdminCookie = function checkAdminCookie() {
+  const result = document.getElementById('cookieResult');
+  const cookies = document.cookie.split(';').map(c=>c.trim());
+  const adminCookie = cookies.find(c=>c.startsWith('admin='));
+  if(adminCookie && adminCookie.split('=')[1] === 'true') {
+    result.style.color='var(--accent3)';
+    result.innerHTML = "✅ ADMIN ACCESS GRANTED!<br>Your flag: <strong>FLAG{c00k13s_4r3_d3l1c10us_4nd_d4ng3r0us}</strong>";
+  } else {
+    result.style.color='var(--accent2)';
+    result.textContent = "❌ No admin cookie detected. Set it in the console first!";
+  }
+}
+
+// ─── PROGRESS TRACKING ───────────────────────────────────────
+let solved = new Set(JSON.parse(localStorage.getItem('cyberSolved')||'[]'));
+function updateProgress() {
+  const pct = (solved.size / 5) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressCount').textContent = solved.size + ' / 5 FLAGS';
+  [1,2,3,4,5].forEach(n => {
+    const card = document.getElementById('card-'+n);
+    if(solved.has(n)) card.classList.add('solved'); else card.classList.remove('solved');
+  });
+  if(solved.size === 5) document.getElementById('victoryBanner').classList.add('show');
+  localStorage.setItem('cyberSolved', JSON.stringify([...solved]));
+}
+updateProgress();
+
+// ─── MODAL LOGIC ─────────────────────────────────────────────
+let currentChallenge = null;
+function openModal(num) {
+  currentChallenge = num;
+  const c = challenges[num];
+  const mc = document.getElementById('modalContent');
+  mc.innerHTML = `
+    <div class="modal-label">// ${c.label}</div>
+    <div class="modal-title">${c.title}</div>
+    <div class="modal-body">${c.content}</div>
+    <div class="modal-label">// SUBMIT FLAG</div>
+    <div class="flag-input-wrap">
+      <input type="text" class="flag-input" id="flagInput" placeholder="FLAG{...}" autocomplete="off" onkeydown="if(event.key==='Enter')submitFlag()">
+      <button class="flag-submit" onclick="submitFlag()">SUBMIT</button>
+    </div>
+    <div class="flag-msg" id="flagMsg"></div>
+  `;
+  document.getElementById('modalOverlay').classList.add('open');
+  setTimeout(()=>document.getElementById('flagInput')?.focus(), 100);
+}
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  currentChallenge = null;
+}
+function closeOnOverlay(e) {
+  if(e.target === document.getElementById('modalOverlay')) closeModal();
+}
+function submitFlag() {
+  const input = document.getElementById('flagInput');
+  const msg = document.getElementById('flagMsg');
+  if(!input || !currentChallenge) return;
+  const val = input.value.trim();
+  const correct = challenges[currentChallenge].flag;
+  if(val.toUpperCase() === correct.toUpperCase()) {
+    input.classList.remove('wrong');
+    input.classList.add('correct');
+    msg.className = 'flag-msg success';
+    msg.textContent = '✓ CORRECT! FLAG CAPTURED. Well done, hacker.';
+    solved.add(currentChallenge);
+    updateProgress();
+    setTimeout(closeModal, 1800);
+  } else {
+    input.classList.add('wrong');
+    input.classList.remove('correct');
+    msg.className = 'flag-msg error';
+    msg.textContent = '✗ Incorrect flag. Keep digging.';
+    setTimeout(()=>input.classList.remove('wrong'), 400);
+  }
+}
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
+</script>
+</body>
+</html>
